@@ -1,8 +1,9 @@
 const express = require('express')
 const multer = require('multer')
+const jimp = require('jimp')
 const User = require('../models/user.js')
 const auth = require('../middleware/auth')
-const { sendWelcomeEmail, sendCalcelationEmail} = require('../emails/account')
+const { sendWelcomeEmail, sendCalcelationEmail } = require('../emails/account')
 
 
 const router = new express.Router()
@@ -90,12 +91,16 @@ router.delete('/users/me', auth, async (req, res) => {
     }
 })
 
+
+
+
+
 const upload = multer({
     /// dest: 'avatars',  // removed for fun to pass file.buffer to it
     limits: {
         fileSize: 1000000
     }, fileFilter(req, file, callback) {
-        if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+        if (!file.originalname.match(/\.(jpg|jpeg|png|PNG)$/)) {
             return callback(new Error('please upload an image!'))
         }
         callback(undefined, true)
@@ -103,18 +108,15 @@ const upload = multer({
 })
 
 router.post('/users/me/avatar', auth, upload.single('avatar'), async (req, res) => {
-    // const buffer = await sharp().resize({ width: 250, height: 250  }).png().toBuffer()
-    req.user.avatar = req.file.buffer
-    await req.user.save()
+    jimp.read(req.file.buffer, async function (err, image) {
+        if (err) {
+            throw new Error(err)
+        }
 
-    // jimp.read(req.file.buffer, (error, image) => {
-    //     if (error) throw error
-    //     image.resize(500, 500)
-    //     req.user.avatar = new jimp( image.bitmap)
-    //     console.log(req.user.avatar)
-    //   // console.log(image.bitmap.data.Type())
-    // })
-    res.send()
+        req.user.avatar =await image.resize(250, 250).write("image.png").getBase64Async('image/png')  //     
+        req.user.save()
+        res.send(req.user)
+    })
 }, (error, req, res, next) => {               /// error handling function so as not to send html error file!
     res.status(400).send({ error: error.message })
 })
@@ -133,13 +135,14 @@ router.get('/users/:id/avatar', async (req, res) => {
         if (!user || !user.avatar)
             throw new error()
 
-        res.set('content-Type', 'image/png')
-        res.send(user.avatar)
-
+         res.set('content-Type', 'image')                                    /// set the server to recieve images  
+         base64= user.avatar.replace(/^data:image\/(png);base64,/, '');      /// Remove 1st part of base64 string!
+         img = Buffer.from(base64,'base64')                                  /// get the Buffer Data!
+         res.send(img)
+ 
     } catch (error) {
         res.status(404).send()
     }
-
 })
 
 

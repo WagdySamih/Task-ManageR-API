@@ -39,8 +39,8 @@ const userSchema = mongoose.Schema({
                 throw new Error('Password Can not contain the word "password"!')
         }
     },
-    avatar:{
-      //s  type:Buffer  
+    avatar: {
+        type: String
     },
     tokens: [{
         token: {
@@ -48,8 +48,8 @@ const userSchema = mongoose.Schema({
             required: true
         }
     }]
-},{
-    timestamps:true
+}, {
+    timestamps: true
 })
 
 /// Hide Non Useful information
@@ -59,7 +59,7 @@ userSchema.methods.toJSON = function () {
 
     delete userObejct.tokens
     delete userObejct.password
-   // delete userObejct.avatar
+    delete userObejct.avatar
 
     return userObejct
 }
