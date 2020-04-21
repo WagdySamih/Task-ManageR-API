@@ -14,22 +14,32 @@ This API was built using node.js, express, mongodb and mongoose.
 
 ### API endpoits:
 
->POST   /users
+>POST   /users 
+
 >POST   /users/login
+
 >POST   /users/logout
+
 >POST   /users/logoutAll/
 
 >GET    /users/me
+
 >PATCH  /users/me
+
 >DEL    /users/me
 
 >POST  /users/me/avatar
+
 >GET   /users/me/avatar
+
 >DEL   /users/me/avatar
 
 >POST  /tasks
->GET   /tasks
->GET   /tasks/:id
->PATCH /tasks/:id
->DEL   /tasks/:id
 
+>GET   /tasks
+
+>GET   /tasks/:id
+
+>PATCH /tasks/:id
+
+>DEL   /tasks/:id
