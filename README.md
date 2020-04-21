@@ -1,7 +1,7 @@
 # Task-Manager-API
 This API was built using node.js, express, mongodb and mongoose.
 
-### This App support:
+## This App support:
 * Sign-up
 * Login - Logout.
 * Authentication.
@@ -12,7 +12,7 @@ This API was built using node.js, express, mongodb and mongoose.
 * Sorting Tasks depending on time created or whether they are completed or not.
 
 
-### API endpoits:
+## API endpoints:
 
 >POST   /users 
 
@@ -20,7 +20,7 @@ This API was built using node.js, express, mongodb and mongoose.
 
 >POST   /users/logout
 
->POST   /users/logoutAll/
+>POST   /users/logoutAll
 
 >GET    /users/me
 
